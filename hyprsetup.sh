@@ -1,8 +1,4 @@
-# Check if run as root
-if [[ $EUID -ne 0 ]]; then
-    echo "Please run this script with sudo"
-    exit 1
-fi
+#!/bin/bash
 
 # Pacman packages
 packages=(
@@ -16,6 +12,7 @@ packages=(
     waybar
     blueman
 )
+
 echo "Updating package database..."
 sudo pacman -Syu --noconfirm
 
@@ -45,37 +42,30 @@ if ! command -v yay &> /dev/null; then
     cd /tmp || exit 1
     git clone https://aur.archlinux.org/yay.git
     cd yay || exit 1
-    makepkg -si --confirm
+    makepkg -si --noconfirm
 fi
 
 echo "Installing AUR packages..."
-for pkg in "${aur[@]}"; do
-    echo "Installing $pkg..."
-    yay -S --noconfirm --needed "$pkg" || {
-        echo "Failed to install $pkg"
-        exit 1
-    }
-done
-echo "All AUR packages intalled successfully!"
-
+yay -S --noconfirm --needed "${aur[@]}" || {
+    echo "Failed to install AUR packages"
+    exit 1
+}
+echo "All AUR packages installed successfully!"
 
 # linking dotfiles to .config
-ln -s ~/Dotfiles/hypr ~/.config/hypr
-ln -s ~/Dotfiles/waybar ~/.config/waybar
-ln -s ~/Dotfiles/ghostty ~/.config/ghostty
+ln -sf ~/Dotfiles/hypr ~/.config/hypr
+ln -sf ~/Dotfiles/waybar ~/.config/waybar
+ln -sf ~/Dotfiles/ghostty ~/.config/ghostty
 
-# installing custom script
+# installing custom script (needs root)
 SRC_DIR="$HOME/Dotfiles/custom"
 DEST_DIR="/usr/local/bin"
 
-# Copy scripts and set permissions
 for script in "$SRC_DIR"/*; do
     if [[ -f "$script" ]]; then
-        cp "$script" "$DEST_DIR"
-        chmod +x "$DEST_DIR/$(basename "$script")"
+        sudo cp "$script" "$DEST_DIR"
+        sudo chmod +x "$DEST_DIR/$(basename "$script")"
         echo "Installed $(basename "$script")"
     fi
 done
 echo "All scripts installed successfully."
-
-
