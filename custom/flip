@@ -1,0 +1,16 @@
+#!/bin/bash
+
+APP="$1"
+
+if [ -z "$APP" ]; then
+    echo "Usage: $0 <app_name>"
+    exit 1
+fi
+
+# Check if it's running (match exact name only)
+if pgrep -x "$APP" > /dev/null; then
+    pkill -x "$APP"
+else
+    "$APP" &
+fi
+

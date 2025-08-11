@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Pick a random image
+wallpaper_dir="$HOME/Pictures/Lock-Wallpaper"
+image=$(find "$wallpaper_dir" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.bmp' -o -iname '*.webp' \) | shuf -n 1)
+
+# Get screen resolution
+resolution=$(xdpyinfo | grep dimensions | awk '{print $2}')
+
+# Temp PNG output
+temp_png="/tmp/lockscreen.png"
+
+# Convert and resize to fit screen
+convert "$image" -resize "$resolution^" -gravity center -extent "$resolution" "$temp_png"
+
+# Lock with i3lock using resized image
+swaylock -i "$temp_png"

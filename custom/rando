@@ -1,0 +1,23 @@
+#!/bin/bash
+swww-daemon &
+wallpaper_dir="$HOME/Pictures/Wallpaper"
+
+# Find all common image types
+wallpaper=$(find "$wallpaper_dir" -type f \( \
+  -iname '*.png' -o \
+  -iname '*.jpg' -o \
+  -iname '*.jpeg' -o \
+  -iname '*.bmp' -o \
+  -iname '*.webp' -o \
+  -iname '*.gif' \
+\) | shuf -n 1)
+
+# Check if any image was found
+if [ -z "$wallpaper" ]; then
+  echo "No images found in $wallpaper_dir"
+  exit 1
+fi
+
+# Set wallpaper and generate pywal colors
+wal -i "$wallpaper"
+

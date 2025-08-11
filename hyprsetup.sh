@@ -1,3 +1,9 @@
+# Check if run as root
+if [[ $EUID -ne 0 ]]; then
+    echo "Please run this script with sudo"
+    exit 1
+fi
+
 # Pacman packages
 packages=(
     alacritty
@@ -57,4 +63,19 @@ echo "All AUR packages intalled successfully!"
 ln -s ~/Dotfiles/hypr ~/.config/hypr
 ln -s ~/Dotfiles/waybar ~/.config/waybar
 ln -s ~/Dotfiles/ghostty ~/.config/ghostty
+
+# installing custom script
+SRC_DIR="$HOME/Dotfiles/custom"
+DEST_DIR="/usr/local/bin"
+
+# Copy scripts and set permissions
+for script in "$SRC_DIR"/*; do
+    if [[ -f "$script" ]]; then
+        cp "$script" "$DEST_DIR"
+        chmod +x "$DEST_DIR/$(basename "$script")"
+        echo "Installed $(basename "$script")"
+    fi
+done
+echo "All scripts installed successfully."
+
 
