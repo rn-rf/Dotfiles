@@ -1,0 +1,31 @@
+#!/bin/bash
+# Auto-mount all unmounted partitions by LABEL or UUID
+
+# Create base mount dir
+MNT_BASE="/mnt"
+
+# Get all block devices that are not mounted, excluding loop devices and system partitions
+lsblk -nrpo NAME,FSTYPE,LABEL,UUID | while read -r dev fstype label uuid; do
+    # Skip if no filesystem type
+    [[ -z "$fstype" ]] && continue
+    # Skip if already mounted
+    mountpoint=$(findmnt -nr -S "$dev")
+    [[ -n "$mountpoint" ]] && continue
+    # Skip system partitions
+    [[ "$dev" == *"boot"* || "$dev" == *"efi"* || "$dev" == *"root"* ]] && continue
+
+    # Fallback label if missing
+    [[ -z "$label" ]] && label="mnt-$(basename "$dev")"
+
+    # Make mount point
+    mkdir -p "$MNT_BASE/$label"
+
+    # Mount with proper driver (ntfs-3g for NTFS, default for others)
+    if [[ "$fstype" == "ntfs" ]]; then
+        sudo mount -t ntfs-3g "$dev" "$MNT_BASE/$label"
+    else
+        sudo mount "$dev" "$MNT_BASE/$label"
+    fi
+
+    echo "Mounted $dev ($fstype) at $MNT_BASE/$label"
+done

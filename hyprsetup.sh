@@ -2,6 +2,17 @@
 
 # Pacman packages
 packages=(
+    telegram-desktop
+    ttf-nerd-fonts-symbols
+    tmux
+    ntfs-3g
+    polkit
+    polkit-gnome
+    jq
+    pamixer
+    neovim
+    ghostty
+    network-manager-applet
     alacritty
     brightnessctl
     git
@@ -14,7 +25,7 @@ packages=(
 )
 
 echo "Updating package database..."
-sudo pacman -Syu --noconfirm
+# sudo pacman -Syu --noconfirm
 
 echo "Installing packages..."
 for pkg in "${packages[@]}"; do
@@ -34,7 +45,7 @@ aur=(
     python-pywal16
     swww
     tela-circle-icon-theme-git
-    zen-browser-bin
+    # zen-browser-bin
 )
 
 # checking yay installed
@@ -56,6 +67,8 @@ echo "All AUR packages installed successfully!"
 ln -sf ~/Dotfiles/hypr ~/.config/hypr
 ln -sf ~/Dotfiles/waybar ~/.config/waybar
 ln -sf ~/Dotfiles/ghostty ~/.config/ghostty
+ln -sf ~/Dotfiles/assets/Lock-Wallpaper ~/Pictures/Lock-Wallpaper
+ln -sf ~/Dotfiles/assets/Wallpaper ~/Pictures/Wallpaper
 
 # installing custom script (needs root)
 SRC_DIR="$HOME/Dotfiles/custom"
@@ -68,4 +81,12 @@ for script in "$SRC_DIR"/*; do
         echo "Installed $(basename "$script")"
     fi
 done
+
+# Other system setting
+sudo systemctl start bluetooth.service
+sudo systemctl enable bluetooth.service
+gsettings set org.gnome.desktop.interface icon-theme "Tela-circle-dark"
+gsettings set org.gnome.desktop.interface gtk-theme "catppuccin-mocha-sapphire-standard+default"
+sudo systemctl enable --now polkit
+
 echo "All scripts installed successfully."

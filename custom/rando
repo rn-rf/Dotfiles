@@ -1,6 +1,6 @@
 #!/bin/bash
 swww-daemon &
-wallpaper_dir="$HOME/Pictures/Wallpaper"
+wallpaper_dir="$HOME/Dotfiles/assets/Wallpaper"
 
 # Find all common image types
 wallpaper=$(find "$wallpaper_dir" -type f \( \
