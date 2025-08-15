@@ -3,6 +3,7 @@
 # Pacman packages
 packages=(
     telegram-desktop
+    swaync
     ttf-nerd-fonts-symbols
     tmux
     ntfs-3g
@@ -67,8 +68,8 @@ echo "All AUR packages installed successfully!"
 ln -sf ~/Dotfiles/hypr ~/.config/hypr
 ln -sf ~/Dotfiles/waybar ~/.config/waybar
 ln -sf ~/Dotfiles/ghostty ~/.config/ghostty
-ln -sf ~/Dotfiles/assets/Lock-Wallpaper ~/Pictures/Lock-Wallpaper
-ln -sf ~/Dotfiles/assets/Wallpaper ~/Pictures/Wallpaper
+ln -sf ~/Dotfiles/assets/Lock-Wallpaper ~/Pictures
+ln -sf ~/Dotfiles/assets/Wallpaper ~/Pictures
 
 # installing custom script (needs root)
 SRC_DIR="$HOME/Dotfiles/custom"

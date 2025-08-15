@@ -1,4 +1,4 @@
 @import url('../../.cache/wal/colors-waybar.css');
 
-@define-color waybar-background alpha(@background, 0);
-@define-color module-background alpha(@background, 0.9);
+@define-color waybar-background alpha(@background, 0.95);
+@define-color module-background alpha(@color7, 0.15);
